@@ -1,0 +1,41 @@
+table {
+	width: 100px;
+	font-family: Tahoma;
+	border-spacing: 10px;
+}
+
+td {
+	background-color: #eee;
+	padding: 10px;
+	text-align: center;
+}
+
+td.href {
+	background-color: #fff;
+}
+
+td.ok {
+	background-color: #9e9;
+}
+
+td.alarm {
+	background-color: #e99;
+}
+
+td[data-rasp] {
+	background-color: #ccc;
+}
+
+td[data-rasp].selected {
+	background-color: #000;	
+	color: #fff;
+}
+
+table#settings {
+	border-spacing: 0;
+}
+
+table#settings td {
+	padding: 0;
+	cursor: pointer;
+}

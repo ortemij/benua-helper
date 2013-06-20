@@ -1,0 +1,16 @@
+{
+    "name":              "Benua Helper",
+    "version":           "2.3.5",
+    "description":       "Autobus schedules for business-center Benua",
+    "manifest_version":  2,
+
+    "browser_action": {
+        "default_title": "Benua Helper",
+        "default_popup": "popup.html",
+        "default_icon":  "bus.png"
+    },
+
+    "background": {
+        "scripts": ["background.js"]
+    }
+}
