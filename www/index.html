@@ -1,0 +1,106 @@
+<html>
+<head>
+	<title>Benua Helper</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<style>
+		#crx {
+			width: 256px;
+			height: 256px;
+			background: url('bus.png') center center no-repeat;
+			position: absolute;
+			left: 50%;
+			top: 200px;
+			margin-left: -128px;
+		}
+
+		#download {
+			position: absolute;
+			z-index: 2;
+			left: 50%;
+			top: 420px;
+			border-radius: 5px;
+			padding: 5px;
+			
+			background-image: linear-gradient(bottom, rgb(166,46,46) 49%, rgb(201,141,76) 75%, rgb(242,151,109) 88%);
+			background-image: -o-linear-gradient(bottom, rgb(166,46,46) 49%, rgb(201,141,76) 75%, rgb(242,151,109) 88%);
+			background-image: -moz-linear-gradient(bottom, rgb(166,46,46) 49%, rgb(201,141,76) 75%, rgb(242,151,109) 88%);
+			background-image: -webkit-linear-gradient(bottom, rgb(166,46,46) 49%, rgb(201,141,76) 75%, rgb(242,151,109) 88%);
+			background-image: -ms-linear-gradient(bottom, rgb(166,46,46) 49%, rgb(201,141,76) 75%, rgb(242,151,109) 88%);
+			background-image: -webkit-gradient(
+				linear,
+				left bottom,
+				left top,
+				color-stop(0.49, rgb(166,46,46)),
+				color-stop(0.75, rgb(201,141,76)),
+				color-stop(0.88, rgb(242,151,109))
+			);
+		}
+
+		a {
+			color: #ffffff;
+			font-size: 2em;
+			font-family: Tahoma;
+		}
+
+		a.link {
+			color: #000099;
+			
+		}
+	</style>
+</head>
+<body>
+	<a href="https://chrome.google.com/webstore/detail/benua-helper/fnegkdpbolaklgedhapmecddppgbonph">
+		<div id="crx"></div>
+		<div id="download">DOWNLOAD</div>
+	</a>
+
+	<center>
+		<a class="link" href="autobus.html">Расписание на сайте</a>
+	</center>
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter6527575 = new Ya.Metrika({id:6527575,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/6527575" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37797734-1']);
+  _gaq.push(['_setDomainName', 'grigoriev.me']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<!-- /Google Analytics -->
+
+</body>
+</html>

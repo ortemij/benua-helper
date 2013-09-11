@@ -1,0 +1,224 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Расписание шаттлов "БЦ Бенуа — пл. Ленина"</title>
+	<link href="autobus.png" rel="shortcut icon" type="image/png" />
+	<style>
+		* {
+			font-family: Tahoma, serif;
+		}
+
+		#wrap_a {
+			position: absolute;
+			left: 150px;
+			top: 50px;
+			font-size: 30px;
+		}
+
+		#time_a {
+			font-size: 150px;
+			background-color: #eee;
+			text-align: center;
+			padding: 0 20px;
+			margin: 10px 0;
+		}
+
+		.red #time_a {
+			background-color: #fcc;
+		}
+
+		#wrap_a.red {
+			color: #f00;
+		}
+
+		#after_a {
+			text-align: right;
+			font-size: 50px;
+		}
+
+		#wrap_b {
+			position: absolute;
+			right: 150px;
+			top: 65px;
+			font-size: 20px;
+		}
+
+		#time_b, #time_c, #time_d {
+			font-size: 80px;
+			background-color: #eee;
+			text-align: center;
+			padding: 0 10px;
+			margin: 5px 0;
+		}
+
+		#after_b, #after_c, #after_d {
+			text-align: right;
+			font-size: 25px;
+			margin-bottom: 30px;
+		}
+	</style>
+</head>
+<body>
+
+<div id="wrap_a">
+	<div style="height: 40px">Ближайший автобус будет в</div>
+	<div id="time_a"></div>
+	<div id="after_a">через <b id="min_a"></b>'</div>
+</div>
+
+<div id="wrap_b">
+	<div style="height: 30px">Затем автобусы будут в</div>
+	<div id="time_b"></div>
+	<div id="after_b">через <b id="min_b"></b>'</div>
+
+	<div id="time_c"></div>
+	<div id="after_c">через <b id="min_c"></b>'</div>
+
+	<div id="time_d"></div>
+	<div id="after_d">через <b id="min_d"></b>'</div>
+</div>
+
+<script language="JavaScript" type="text/javascript">
+	(function () {
+		var config = {
+			needed_autobuses_number: 4
+		};
+
+		var schedule = {
+				data: [
+        [7, [40]],
+        [8, [0, 20, 30, 40, 50]],
+        [9, [0, 10, 20, 30, 40, 50]],
+        [10, [0, 10, 20, 30, 40, 50]],
+        [11, [0, 10, 20, 30, 40, 50]],
+        [12, [0, 10, 20, 30, 40, 50]],
+        [13, [0, 20, 40]],
+        [14, [0, 20, 40]],
+        [15, [0, 20, 40]],
+        [16, [0, 20, 40]],
+        [17, [0, 10, 20, 30, 40, 50]],
+        [18, [0, 10, 20, 30, 40, 50]],
+        [19, [0, 10, 20, 30, 40, 50]],
+        [20, [0, 10, 20, 40]],
+        [21, [0, 20, 40]],
+        [22, [20]],
+        [23, [0]]
+				],
+				reorganized: [],
+				reorganize: function () {
+					for (var i = 0; i < this.data.length; ++i) {
+						for (var j = 0; j < this.data[i][1].length; ++j) {
+							this.reorganized.push([this.data[i][0], this.data[i][1][j]]);
+						}
+					}
+				},
+				after: function (h, m) {
+					var found = [], i, autobus;
+					for (i = 0; i < this.reorganized.length && found.length < config.needed_autobuses_number; ++i) {
+						autobus = this.reorganized[i];
+						if (autobus[0] == h && autobus[1] >= m || autobus[0] > h) {
+							found.push(autobus);
+						}
+					}
+					if (found.length < config.needed_autobuses_number) {
+						for (i = 0; found.length < config.needed_autobuses_number; ++i) {
+							autobus = this.reorganized[i];
+							found.push(autobus);
+						}
+					}
+					return found;
+				}
+		};
+
+		function format(h, m) {
+			var s = (new Date()).getSeconds();
+			return (h < 10 ? "0" + h : h) + "<span style=\"color: " + (s % 2 ? "auto" : "transparent") + "\">:</span>" + (m < 10 ? "0" + m : m);
+		}
+
+		function distance(h1, m1, h2, m2) {
+			var dh = h2 - h1, dm = m2 - m1;
+			if (dh < 0) {
+				dh += 24;
+			}
+			var dist = dh * 60 + dm;
+			if (dist > 100) {
+				return "много";
+			}
+			return dist;
+		}
+
+		schedule.reorganize();
+
+		function refresh() {
+			var d = new Date(), h = d.getHours(), m = d.getMinutes();
+			var found = schedule.after(h, m);
+
+			document.getElementById('time_a').innerHTML = format(found[0][0], found[0][1]);
+			var dist = distance(h, m, found[0][0], found[0][1]);
+			document.getElementById('min_a').innerHTML = dist;
+			if (dist <= 5) {
+				document.getElementById('wrap_a').className = 'red';
+			} else {
+				document.getElementById('wrap_a').className = '';
+			}
+
+			document.getElementById('time_b').innerHTML = format(found[1][0], found[1][1]);
+			document.getElementById('min_b').innerHTML = distance(h, m, found[1][0], found[1][1]);
+
+			document.getElementById('time_c').innerHTML = format(found[2][0], found[2][1]);
+			document.getElementById('min_c').innerHTML = distance(h, m, found[2][0], found[2][1]);
+
+			document.getElementById('time_d').innerHTML = format(found[3][0], found[3][1]);
+			document.getElementById('min_d').innerHTML = distance(h, m, found[3][0], found[3][1]);
+		}
+
+		setInterval(refresh, 1000);
+	})();
+</script>
+
+
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+(function (d, w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter18673294 = new Ya.Metrika({id:6527575,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+        } catch(e) { }
+    });
+
+    var n = d.getElementsByTagName("script")[0],
+        s = d.createElement("script"),
+        f = function () { n.parentNode.insertBefore(s, n); };
+    s.type = "text/javascript";
+    s.async = true;
+    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+
+    if (w.opera == "[object Opera]") {
+        d.addEventListener("DOMContentLoaded", f, false);
+    } else { f(); }
+})(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/18673294" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-37797734-1']);
+  _gaq.push(['_setDomainName', 'grigoriev.me']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+<!-- /Google Analytics -->
+
+</body>
+</html>
