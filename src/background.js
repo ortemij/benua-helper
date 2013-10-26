@@ -167,5 +167,29 @@
     return window.localStorage.getItem("rasp");
   }
 
-  window.setInterval(refreshSchedule, 10000);
+  /**
+   * @return {number} Integer number of seconds till next minute [1; 60].
+   */
+  function getNumberOfSecondsTillNextMinute() {
+    var nowDate = new Date();
+    return 60 - nowDate.getSeconds();
+  }
+
+  function init() {
+    // Update now.
+    refreshSchedule();
+
+    // Update on next minute start.
+    setTimeout(function() {
+      refreshSchedule();
+
+      // And every minute after.
+      setInterval(refreshSchedule, 60 * 1000);
+
+      // XXX(alexeykuzmin): `chrome.alarms` fires events not very precisely.
+    }, getNumberOfSecondsTillNextMinute() * 1000);
+  }
+
+  init();
+
 })(window, chrome);
