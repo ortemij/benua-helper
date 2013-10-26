@@ -136,8 +136,10 @@
     return (h < 10 ? "0" + h : h) + (d.getSeconds() % 2 == 0 ? ":" : ":") + (m < 10 ? "0" + m : m);
   }
 
+  var schedule = null;
+
   function save (found) {
-    window.localStorage.setItem("schedule", JSON.stringify(found));
+    schedule = found;
   }
 
   function distance (h1, m1, h2, m2) {
@@ -167,6 +169,12 @@
     return window.localStorage.getItem("rasp");
   }
 
+  function handleMessage(message, sender, sendResponse) {
+    if ('getSchedule' === message) {
+      sendResponse(schedule);
+    }
+  }
+
   /**
    * @return {number} Integer number of seconds till next minute [1; 60].
    */
@@ -175,7 +183,21 @@
     return 60 - nowDate.getSeconds();
   }
 
+  function cleanUpLocalStorage() {
+    localStorage.removeItem('schedule');
+  }
+
   function init() {
+    // Listen for request from popup.
+    chrome.runtime.onMessage.addListener(handleMessage);
+
+    // Clean up localStorage on extension update.
+    chrome.runtime.onInstalled.addListener(function(details) {
+      if (details.reason === 'update') {
+        cleanUpLocalStorage();
+      }
+    });
+
     // Update now.
     refreshSchedule();
 

@@ -18,8 +18,10 @@
   }
 
   function refresh () {
-    var raw = window.localStorage.getItem("schedule");
-    var found = JSON.parse(raw);
+    chrome.runtime.sendMessage('getSchedule', renderSchedule);
+  }
+
+  function renderSchedule(found) {
     for (var i = 0; i < 4; ++i) {
       var td = document.getElementById('autobus_' + i);
       var d = new Date(), h = d.getHours(), m = d.getMinutes();
