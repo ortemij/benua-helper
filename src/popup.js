@@ -60,6 +60,6 @@
   }
 
   refresh();
-  window.setInterval(refresh, 100);
+  window.setInterval(refresh, 1e4);
 
 })(window, document, chrome);
