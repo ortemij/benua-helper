@@ -167,5 +167,5 @@
     return window.localStorage.getItem("rasp");
   }
 
-  window.setInterval(refreshSchedule, 100);
+  window.setInterval(refreshSchedule, 10000);
 })(window, chrome);
