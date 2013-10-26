@@ -50,6 +50,7 @@
           document.getElementsByClassName('selected')[0].className = '';
           td.className = 'selected';
           window.localStorage.setItem("rasp", key);
+          refresh();
         });
       })(td, key);
     }
