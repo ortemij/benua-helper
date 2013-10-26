@@ -136,12 +136,6 @@
     return (h < 10 ? "0" + h : h) + (d.getSeconds() % 2 == 0 ? ":" : ":") + (m < 10 ? "0" + m : m);
   }
 
-  var schedule = null;
-
-  function save (found) {
-    schedule = found;
-  }
-
   function distance (h1, m1, h2, m2) {
     var dh = h2 - h1, dm = m2 - m1;
     if (dh < 0) {
@@ -154,25 +148,30 @@
     return dist;
   }
 
-  function refreshSchedule() {
-    var name = getScheduleName();
-
-    var d = new Date(), h = d.getHours(), m = d.getMinutes();
-    var found = reorganized[name].after(h, m);
-    var dist = distance(h, m, found[0].h, found[0].m);
-
-    badge(dist);
-    save(found);
-  }
-
   function getScheduleName () {
     return window.localStorage.getItem("rasp");
   }
 
   function handleMessage(message, sender, sendResponse) {
     if ('getSchedule' === message) {
+      var schedule = getNextBusesList();
       sendResponse(schedule);
     }
+  }
+
+  function getNextBusesList() {
+    var d = new Date(), h = d.getHours(), m = d.getMinutes();
+    var name = getScheduleName();
+    var nextBuses = reorganized[name].after(h, m);
+    return nextBuses;
+  }
+
+  function updateBadge() {
+    var d = new Date(), h = d.getHours(), m = d.getMinutes();
+    var nextBuses = getNextBusesList();
+    var nextBus = nextBuses[0];
+    var minutesTillNextBus = distance(h, m, nextBus.h, nextBus.m);
+    badge(minutesTillNextBus);
   }
 
   /**
@@ -199,14 +198,14 @@
     });
 
     // Update now.
-    refreshSchedule();
+    updateBadge();
 
     // Update on next minute start.
     setTimeout(function() {
-      refreshSchedule();
+      updateBadge();
 
       // And every minute after.
-      setInterval(refreshSchedule, 60 * 1000);
+      setInterval(updateBadge, 60 * 1000);
 
       // XXX(alexeykuzmin): `chrome.alarms` fires events not very precisely.
     }, getNumberOfSecondsTillNextMinute() * 1000);
