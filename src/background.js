@@ -156,6 +156,8 @@
     if ('getSchedule' === message) {
       var schedule = getNextBusesList();
       sendResponse(schedule);
+    } else if ('updateBadge' === message) {
+      updateBadge();
     }
   }
 

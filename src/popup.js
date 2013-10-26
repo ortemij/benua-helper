@@ -17,6 +17,10 @@
     return dist;
   }
 
+  function updateBadge() {
+    chrome.runtime.sendMessage('updateBadge');
+  }
+
   function refresh () {
     chrome.runtime.sendMessage('getSchedule', renderSchedule);
   }
@@ -52,6 +56,7 @@
           document.getElementsByClassName('selected')[0].className = '';
           td.className = 'selected';
           window.localStorage.setItem("rasp", key);
+          updateBadge();
           refresh();
         });
       })(td, key);
