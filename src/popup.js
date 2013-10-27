@@ -17,9 +17,15 @@
     return dist;
   }
 
+  function updateBadge() {
+    chrome.runtime.sendMessage('updateBadge');
+  }
+
   function refresh () {
-    var raw = window.localStorage.getItem("schedule");
-    var found = JSON.parse(raw);
+    chrome.runtime.sendMessage('getSchedule', renderSchedule);
+  }
+
+  function renderSchedule(found) {
     for (var i = 0; i < 4; ++i) {
       var td = document.getElementById('autobus_' + i);
       var d = new Date(), h = d.getHours(), m = d.getMinutes();
@@ -50,6 +56,8 @@
           document.getElementsByClassName('selected')[0].className = '';
           td.className = 'selected';
           window.localStorage.setItem("rasp", key);
+          updateBadge();
+          refresh();
         });
       })(td, key);
     }
@@ -60,6 +68,6 @@
   }
 
   refresh();
-  window.setInterval(refresh, 100);
+  window.setInterval(refresh, 1e4);
 
 })(window, document, chrome);

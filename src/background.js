@@ -136,10 +136,6 @@
     return (h < 10 ? "0" + h : h) + (d.getSeconds() % 2 == 0 ? ":" : ":") + (m < 10 ? "0" + m : m);
   }
 
-  function save (found) {
-    window.localStorage.setItem("schedule", JSON.stringify(found));
-  }
-
   function distance (h1, m1, h2, m2) {
     var dh = h2 - h1, dm = m2 - m1;
     if (dh < 0) {
@@ -152,20 +148,71 @@
     return dist;
   }
 
-  function refreshSchedule() {
-    var name = getScheduleName();
-
-    var d = new Date(), h = d.getHours(), m = d.getMinutes();
-    var found = reorganized[name].after(h, m);
-    var dist = distance(h, m, found[0].h, found[0].m);
-
-    badge(dist);
-    save(found);
-  }
-
   function getScheduleName () {
     return window.localStorage.getItem("rasp");
   }
 
-  window.setInterval(refreshSchedule, 10000);
+  function handleMessage(message, sender, sendResponse) {
+    if ('getSchedule' === message) {
+      var schedule = getNextBusesList();
+      sendResponse(schedule);
+    } else if ('updateBadge' === message) {
+      updateBadge();
+    }
+  }
+
+  function getNextBusesList() {
+    var d = new Date(), h = d.getHours(), m = d.getMinutes();
+    var name = getScheduleName();
+    var nextBuses = reorganized[name].after(h, m);
+    return nextBuses;
+  }
+
+  function updateBadge() {
+    var d = new Date(), h = d.getHours(), m = d.getMinutes();
+    var nextBuses = getNextBusesList();
+    var nextBus = nextBuses[0];
+    var minutesTillNextBus = distance(h, m, nextBus.h, nextBus.m);
+    badge(minutesTillNextBus);
+  }
+
+  /**
+   * @return {number} Integer number of seconds till next minute [1; 60].
+   */
+  function getNumberOfSecondsTillNextMinute() {
+    var nowDate = new Date();
+    return 60 - nowDate.getSeconds();
+  }
+
+  function cleanUpLocalStorage() {
+    localStorage.removeItem('schedule');
+  }
+
+  function init() {
+    // Listen for request from popup.
+    chrome.runtime.onMessage.addListener(handleMessage);
+
+    // Clean up localStorage on extension update.
+    chrome.runtime.onInstalled.addListener(function(details) {
+      if (details.reason === 'update') {
+        cleanUpLocalStorage();
+      }
+    });
+
+    // Update now.
+    updateBadge();
+
+    // Update on next minute start.
+    setTimeout(function() {
+      updateBadge();
+
+      // And every minute after.
+      setInterval(updateBadge, 60 * 1000);
+
+      // XXX(alexeykuzmin): `chrome.alarms` fires events not very precisely.
+    }, getNumberOfSecondsTillNextMinute() * 1000);
+  }
+
+  init();
+
 })(window, chrome);
