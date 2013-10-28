@@ -77,7 +77,7 @@
       ]
   };
 
-  function Shedule() {
+  function Schedule() {
     return {
       data: [],
       reorganized: [],
@@ -112,10 +112,10 @@
   };
 
   var reorganized = {
-    benua_lenina: new Shedule(),
-    lenina_benua: new Shedule(),
-    benua_novocherkasskaya: new Shedule(),
-    novocherkasskaya_benua: new Shedule()
+    benua_lenina: new Schedule(),
+    lenina_benua: new Schedule(),
+    benua_novocherkasskaya: new Schedule(),
+    novocherkasskaya_benua: new Schedule()
   };
 
   for (var k in reorganized) {
