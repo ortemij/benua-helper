@@ -189,8 +189,13 @@
   }
 
   function init() {
+    // Support old versions of Chrome/Chromium/Yandex.Browser (28-).
+    var onMessage = chrome.runtime.onMessage ?
+        chrome.runtime.onMessage :
+        chrome.extension.onMessage;
+
     // Listen for request from popup.
-    chrome.runtime.onMessage.addListener(handleMessage);
+    onMessage.addListener(handleMessage);
 
     // Clean up localStorage on extension update.
     chrome.runtime.onInstalled.addListener(function(details) {
