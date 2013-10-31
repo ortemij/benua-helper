@@ -17,12 +17,21 @@
     return dist;
   }
 
+  // Support old versions of Chrome/Chromium/Yandex.Browser (28-).
+  function getMessagingNamespace() {
+    return chrome.runtime.sendMessage ?
+        chrome.runtime :
+        chrome.extension;
+  }
+
   function updateBadge() {
-    chrome.runtime.sendMessage('updateBadge');
+    var namespace = getMessagingNamespace();
+    namespace.sendMessage('updateBadge');
   }
 
   function refresh () {
-    chrome.runtime.sendMessage('getSchedule', renderSchedule);
+    var namespace = getMessagingNamespace();
+    namespace.sendMessage('getSchedule', renderSchedule);
   }
 
   function renderSchedule(found) {
