@@ -8,9 +8,10 @@ server {
 	root /var/www/benua.grigoriev.me/www;
 	index index.html;
 	
+	location = / { }
 	location = /autobus.html { }
 	location = /index.html { }
-	location = /autobus.png { }
+	location = /bus.png { }
 
 	location / {
 		return 403;
