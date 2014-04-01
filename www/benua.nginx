@@ -5,7 +5,7 @@ server {
 	access_log /var/log/nginx/benua.access.log;
 	error_log  /var/log/nginx/benua.error.log;
 	
-	root /var/www/benua.grigoriev.me;
+	root /var/www/benua.grigoriev.me/www;
 	index index.html;
 	
 	location = /autobus.html { }
