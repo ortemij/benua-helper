@@ -1,0 +1,18 @@
+server {
+	listen 80;
+	server_name benua.grigoriev.me;
+	
+	access_log /var/log/nginx/benua.access.log;
+	error_log  /var/log/nginx/benua.error.log;
+	
+	root /var/www/benua.grigoriev.me;
+	index index.html;
+	
+	location = /autobus.html { }
+	location = /index.html { }
+	location = /autobus.png { }
+
+	location / {
+		return 403;
+	}
+}
